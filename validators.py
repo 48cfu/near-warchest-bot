@@ -3,11 +3,11 @@ import numpy as np
 
 import requests
 import json 
-from mpmath import mpf, mp
+#from mpmath import mpf, mp
 import math
 
-import eventlet
-eventlet.monkey_patch()
+#import eventlet
+#eventlet.monkey_patch()
 
 import near_api
 

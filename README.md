@@ -4,8 +4,12 @@
 
 A Python library for development of applications that are using NEAR platform.
 
-# Install necessary packages
 
+# Install necessary packages
+```bash
+sudo apt-get install python3-setuptools
+sudo apt-get install python3-dev
+```
 First, install the package in development mode:
 ```bash
 python setup.py develop

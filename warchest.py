@@ -1,11 +1,12 @@
 
-# if windows at the beginning of the script
-import gevent.monkey
-gevent.monkey.patch_all()
+
+# if Microsoft windows uncomment the following 2 lines
+# import gevent.monkey
+# gevent.monkey.patch_all()
 
 
 import requests
-import eventlet
+#import eventlet
 import json 
 
 import math
@@ -14,7 +15,7 @@ import numpy as np
 import time
 import sys
 
-eventlet.monkey_patch()
+#eventlet.monkey_patch()
 
 from validators import Validators
 from blockchain import Blockchain
@@ -27,7 +28,7 @@ UPDATES_PER_HOUR = 12 #
 NODE_ENV = 'betanet' # define blockchain environment
 CONTRACT_NAME = 'validator_italia_contract'
 PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT = '/root/.near-credentials/betanet/validator_italia.betanet.json'
-#PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT = 'D:/Users/*/Desktop/nodomatico.com/.near_credentials/betanet/validator_italia.betanet.json'
+#PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT = 'D:/Users/48cfu/Desktop/nodomatico.com/.near_credentials/betanet/validator_italia.betanet.json'
 AGGRESSIVENESS = 0.1 # between 0 and 1. Eg. 0.1 means lock 10% above estimated seat price
 YOCTO_CONSTANT = 10**24 #how many yocto in 1 unit
 # Amount of gas attached by default 1e14.
@@ -44,6 +45,7 @@ UPDATE_RATE = 60 * (60 // UPDATES_PER_HOUR) #seconds
 '''
 Main program
 '''
+bot_has_been_executed = False
 
 while True:
     try: 
@@ -69,7 +71,7 @@ while True:
             bot_has_been_executed = True
 
         # if in debug mode always run
-        if not bot_has_been_executed or DEBUG:
+        if not bot_has_been_executed:
             # create master account
             validators_node = Validators('validator_italia_contract', PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT, ENDPOINT_URL)
             estimated_seat_price_nextnext_epoch = near_blockchain.get_seat_price(epoch='proposals')
