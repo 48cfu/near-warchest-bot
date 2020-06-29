@@ -45,7 +45,7 @@ UPDATE_RATE = 60 * (60 // UPDATES_PER_HOUR) #seconds
 '''
 Main program
 '''
-bot_has_been_executed = False
+bot_has_been_executed = True
 
 while True:
     try: 
@@ -65,7 +65,7 @@ while True:
             print('Epoch t + 2 seat price', near_blockchain.get_seat_price(epoch='proposals'))
             print('Percentage current epoch ', epoch_percentage)
 
-        if epoch_percentage > 95 and not bot_has_been_executed:
+        if epoch_percentage > 95:
             bot_has_been_executed = False
         elif epoch_percentage <= 95:
             bot_has_been_executed = True
