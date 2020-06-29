@@ -65,11 +65,12 @@ while True:
             print('Epoch t + 2 seat price', near_blockchain.get_seat_price(epoch='proposals'))
             print('Percentage current epoch ', epoch_percentage)
 
-        if epoch_percentage > 95:
+        # Make sure bot runs only once per epoch to avoid spamming       
+        if epoch_percentage > 95 and bot_has_been_executed:
             bot_has_been_executed = False
         elif epoch_percentage <= 95:
             bot_has_been_executed = True
-
+            
         # if in debug mode always run
         if not bot_has_been_executed:
             # create master account
@@ -157,8 +158,7 @@ while True:
 
                 if DEBUG:
                     print('Staking receipt', receipt)
-            # bot has been executed. Make sure it runs only once per epoch to avoid spamming        
-            bot_has_been_executed = True
+            
 
     except:
         # avoid service from dying. retry again in 60 seconds
