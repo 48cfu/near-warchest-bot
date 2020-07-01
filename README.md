@@ -4,6 +4,8 @@
 
 A Python library for development of applications that are using NEAR platform.
 
+# Account and staking pool contract information
+Modify the initial lines of `warchest.py` with your contract and account information.
 
 # Install necessary packages
 First, install the package in development mode:
