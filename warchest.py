@@ -74,7 +74,7 @@ while True:
         # if in debug mode always run
         if not bot_has_been_executed:
             # create master account
-            validators_node = Validators('validator_italia_contract', PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT, ENDPOINT_URL)
+            validators_node = Validators(CONTRACT_NAME, PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT, ENDPOINT_URL)
             estimated_seat_price_nextnext_epoch = near_blockchain.get_seat_price(epoch='proposals')
             amount_master_account_unlocked = int(validators_node.get_master_account().state['amount'])
 
