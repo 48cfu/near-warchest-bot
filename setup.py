@@ -13,7 +13,7 @@ META_DATA = dict(
 
     packages = find_packages(),
 
-    install_requires = ["requests", "base58", "ed25519", 'numpy', 'eventlet']
+    install_requires = ["requests", "base58", "ed25519", 'numpy', 'eventlet', 'gevent']
 )
 
 if __name__ == "__main__":

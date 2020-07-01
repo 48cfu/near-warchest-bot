@@ -18,7 +18,7 @@ class JsonProvider(object):
     def rpc_addr(self):
         return self._rpc_addr
 
-    def json_rpc(self, method, params, timeout=2):
+    def json_rpc(self, method, params, timeout=5):
         j = {
             'method': method,
             'params': params,
@@ -35,11 +35,11 @@ class JsonProvider(object):
     def send_tx(self, signed_tx):
         return self.json_rpc('broadcast_tx_async', [base64.b64encode(signed_tx).decode('utf8')])
 
-    def send_tx_and_wait(self, signed_tx, timeout):
+    def send_tx_and_wait(self, signed_tx, timeout = 10):
         return self.json_rpc('broadcast_tx_commit', [base64.b64encode(signed_tx).decode('utf8')], timeout=timeout)
 
     def get_status(self):
-        r = requests.get("%s/status" % self.rpc_addr(), timeout=2)
+        r = requests.get("%s/status" % self.rpc_addr(), timeout=5)
         r.raise_for_status()
         return json.loads(r.content.decode('utf-8'))
 

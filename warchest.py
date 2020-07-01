@@ -1,8 +1,8 @@
 
 
 # if Microsoft windows uncomment the following 2 lines
-# import gevent.monkey
-# gevent.monkey.patch_all()
+import gevent.monkey
+gevent.monkey.patch_all()
 
 
 import requests
@@ -27,8 +27,8 @@ DEBUG = True
 UPDATES_PER_HOUR = 12 #
 NODE_ENV = 'betanet' # define blockchain environment
 CONTRACT_NAME = 'validator_italia_contract'
-PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT = '/root/.near-credentials/betanet/validator_italia.betanet.json'
-#PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT = 'D:/Users/48cfu/Desktop/nodomatico.com/.near_credentials/betanet/validator_italia.betanet.json'
+
+PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT = 'path_to_home/.near_credentials/betanet/validator_italia.betanet.json'
 AGGRESSIVENESS = 0.1 # between 0 and 1. Eg. 0.1 means lock 10% above estimated seat price
 YOCTO_CONSTANT = 10**24 #how many yocto in 1 unit
 # Amount of gas attached by default 1e14.
@@ -70,13 +70,23 @@ while True:
             bot_has_been_executed = False
         elif epoch_percentage <= 95:
             bot_has_been_executed = True
-            
+
         # if in debug mode always run
         if not bot_has_been_executed:
             # create master account
             validators_node = Validators('validator_italia_contract', PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT, ENDPOINT_URL)
             estimated_seat_price_nextnext_epoch = near_blockchain.get_seat_price(epoch='proposals')
             amount_master_account_unlocked = int(validators_node.get_master_account().state['amount'])
+
+            # ping contract before proceding
+            # near call my_validator ping '{}' --accountId user1
+            '''
+            validators_node.get_master_account().function_call(
+                contract_id = CONTRACT_NAME, 
+                method_name = 'ping', 
+                args = None, 
+                gas = DEFAULT_ATTACHED_GAS)
+            '''
 
             # if master account has more that 1 NEAR deposit it to contract
             if amount_master_account_unlocked > YOCTO_CONSTANT and DEPOSIT_ALL_TOKENS_FROM_MASTERACCOUNT_INTO_CONTRACT:
@@ -121,19 +131,21 @@ while True:
                                                             args = {'account_id':  validators_node.get_master_account().account_id})['result'])
 
                 if DEBUG:
+                    print('Low current locked stake. Stake some near token!')
                     print('Available unstaked balance', amount_master_account_unstaked_balance)
 
                 to_stake = min(to_propose - amount_contract_account_locked, amount_master_account_unstaked_balance)
 
-                # do the actual staking transaction
-                # near call <POOL_ID> stake '{"amount": "<STAKE_AMOUNT>"}' --accountId <WARCHEST_ID>
-                receipt = validators_node.get_master_account().function_call(
-                    contract_id = CONTRACT_NAME, 
-                    method_name = 'stake', 
-                    args = {'amount': str(to_stake)}, 
-                    gas = DEFAULT_ATTACHED_GAS)
-                if DEBUG:
-                    print('Staking receipt', receipt)
+                if to_stake > 0:
+                    # do the actual staking transaction
+                    # near call <POOL_ID> stake '{"amount": "<STAKE_AMOUNT>"}' --accountId <WARCHEST_ID>
+                    receipt = validators_node.get_master_account().function_call(
+                        contract_id = CONTRACT_NAME, 
+                        method_name = 'stake', 
+                        args = {'amount': str(to_stake)}, 
+                        gas = DEFAULT_ATTACHED_GAS)
+                    if DEBUG:
+                        print('Staking receipt', receipt)
             elif amount_contract_account_locked > to_propose:
                 # high current locked stake. Unstake some near token
 
@@ -145,19 +157,22 @@ while True:
                                                             args = {'account_id':  validators_node.get_master_account().account_id})['result'])
 
                 if DEBUG:
+                    print('High current locked stake. Unstake some near token!')
                     print('Available staked balance', amount_master_account_staked_balance)
 
                 to_unstake = min(amount_contract_account_locked - to_propose, amount_master_account_staked_balance)
-            
-                # near call <POOL_ID> stake '{"amount": "<STAKE_AMOUNT>"}' --accountId <WARCHEST_ID>
-                receipt = validators_node.get_master_account().function_call(
-                    contract_id = CONTRACT_NAME, 
-                    method_name = 'unstake', 
-                    args = {'amount': str(to_unstake)}, 
-                    gas = DEFAULT_ATTACHED_GAS)
+                if to_unstake > 0:
+                    # near call <POOL_ID> stake '{"amount": "<STAKE_AMOUNT>"}' --accountId <WARCHEST_ID>
+                    receipt = validators_node.get_master_account().function_call(
+                        contract_id = CONTRACT_NAME, 
+                        method_name = 'unstake', 
+                        args = {'amount': str(to_unstake)}, 
+                        gas = DEFAULT_ATTACHED_GAS)
 
-                if DEBUG:
-                    print('Staking receipt', receipt)
+                    if DEBUG:
+                        print('Staking receipt', receipt)
+        else:
+            print('Nothing to do now. Epoch at %s percent' % epoch_percentage)
             
 
     except:
