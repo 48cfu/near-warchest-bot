@@ -15,7 +15,9 @@ First, install the package in development mode:
 python3 setup.py develop
 ```
 
-modify line 10 in warchest.service with the actual absolute path to warchest.py
+modify line 10 in `warchest.service` with the actual absolute path to `warchest.py`
+# Account and staking pool contract information
+Modify the initial lines of `warchest.py` with your contract and account information.
 
 # Start service and check if it's running
 Prefix commands with ```sudo ``` if necessary
