@@ -24,7 +24,7 @@ from blockchain import Blockchain
 RUN PARAMETERS
 '''
 DEBUG = True
-UPDATES_PER_HOUR = 12 #
+UPDATES_PER_HOUR = 12 # at least 12 for betanet to make sure that bot is executed at least once when epoch percentage is between 95% and 100%
 NODE_ENV = 'betanet' # define blockchain environment
 CONTRACT_NAME = 'validator_italia_contract'
 
