@@ -11,7 +11,7 @@ First, install the package in development mode:
 python setup.py develop
 ```
 Afterwards start you warchest bot
-Prefix commands with ```sudo ``` if necessary
+
 ```bash
 python warchest.py
 ```
