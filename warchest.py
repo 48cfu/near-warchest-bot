@@ -1,6 +1,6 @@
 # if Microsoft windows uncomment the following 2 lines
-import gevent.monkey
-gevent.monkey.patch_all()
+#import gevent.monkey
+#gevent.monkey.patch_all()
 
 
 import requests
@@ -19,12 +19,12 @@ from blockchain import Blockchain
 RUN PARAMETERS
 '''
 DEBUG = True
-UPDATES_PER_HOUR = 12 #
+UPDATES_PER_HOUR = 12 # at least 12 for betanet to make sure that bot is executed at least once when epoch percentage is between 95% and 100%
 NODE_ENV = 'betanet' # define blockchain environment
 CONTRACT_NAME = 'validator_italia_contract'
-#PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT = '/root/.near-credentials/betanet/validator_italia.betanet.json'
-PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT = 'D:/Users/Precious/Desktop/nodomatico.com/.near_credentials/betanet/validator_italia.betanet.json'
-AGGRESSIVENESS = 0.1 # between 0 and 1. Eg. 0.1 means lock 10% above estimated seat price
+PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT = '/root/.near-credentials/betanet/validator_italia.betanet.json'
+
+AGGRESSIVENESS = 0.4 # between 0 and 1. Eg. 0.1 means lock 10% above estimated seat price
 YOCTO_CONSTANT = 10**24 #how many yocto in 1 unit
 # Amount of gas attached by default 1e14.
 DEFAULT_ATTACHED_GAS = 100000000000000
@@ -69,7 +69,7 @@ while True:
         # if in debug mode always run
         if not bot_has_been_executed:
             # create master account
-            validators_node = Validators('validator_italia_contract', PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT, ENDPOINT_URL)
+            validators_node = Validators(CONTRACT_NAME, PATH_TO_JSON_PRIVATE_KEY_FILE_MASTER_ACCOUNT, ENDPOINT_URL)
             estimated_seat_price_nextnext_epoch = near_blockchain.get_seat_price(epoch='proposals')
             amount_master_account_unlocked = int(validators_node.get_master_account().state['amount'])
 
