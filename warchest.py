@@ -91,7 +91,7 @@ while True:
             # if master account has more that 1 NEAR deposit it to contract
             if amount_master_account_unlocked > YOCTO_CONSTANT and DEPOSIT_ALL_TOKENS_FROM_MASTERACCOUNT_INTO_CONTRACT:
                 # always try to cover for account cost by subtracting 1 NEAR from the available amount
-                to_deposit_in_near = (amount_master_account_unlocked - YOCTO_CONSTANT)// YOCTO_CONSTANT 
+                to_deposit_in_near = amount_master_account_unlocked - YOCTO_CONSTANT
                 
                 # near call my_validator deposit '{}' --accountId user1 --amount AMOUNT_IN_NEAR
                 validators_node.get_master_account().function_call(
